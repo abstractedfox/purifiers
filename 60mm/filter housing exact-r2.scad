@@ -4,97 +4,76 @@
 //new or derived content from or based on the input set, or used to build a data set or training model for any software or
 //tooling which facilitates the use or operation of such software.
 
-filterD = 66; //6cm filter diameter, add 3 for (2mm wall width) + (1mm wiggle room to fit the filter)
 
+//Some notes:
+//At the time of this writing, OpenSCAD visualizes in a very weird way until you actually render, so if it looks bizarre and physically impossible, try rendering
 
-//irl filter height is 8.5cm
-//we're going to leave some slack so we won't require a perfect joining of this piece and the flow conditioner/exact fit of the filter
-housingHeight = 85;
+$fn = 250; //Amount of 'resolution' to give to shape primitives (less == more blocky, reduce if renders or the editor are too slow or if you just like blocky air purifiers)
+
+filterDiameter = 66; //6cm filter diameter, add 3 for (2mm wall width) + (1mm wiggle room to fit the filter)
+
+housingHeight = 86;
 
 maxwidth = 69; //of the entire housing, ie screwplanes
 
-owo = "chrisisgr8 engineering";
 
-module christext(){
-    /*
-    translate([-2,-20,1])
-    //rotate([60,0,0])
-            linear_extrude(height = 2)
-            text("chrisisgr8 engineering", 
-                     size=4,
-                     font="Acumin Variable Concept:style=ExtraCondensed UltraBlack Italic",
-                     halign="center",
-                     valign="center");*/
-}
-
-//christext();
-
-//note: this looks really fucky until you render it because of the way we're using subtracts to mask things out
-
-/*
-linear_extrude(height = housingHeight)
-difference(){
-    circle(d = filterD + 2);
-    circle(d = filterD - 3);
-}*/
-
-
-count = 8; //number of vanes
-
+//Internal vanes
+numVanes = 8; //number of vanes
 centerGap = 6; //space in the center where the vanes don't meet
-//fanGap = 40; //space between flow conditioner vanes and fan plane
-fanGap = 30;
-extension = 0; //depth to extend the vanes below the housing of the flow conditioner
-extensionDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
+vaneHeightReduction = 30; //space between flow conditioner vanes and these vanes (if set to 0, the vanes will go up to the height of the part)
+vaneThickness = 1.5;
+maxInnerDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
 
-//vanes
+extension = 0; //depth to extend the vanes below the housing of the flow conditioner
+
+//clarity note: this enclosing difference() is to mask out the portion of the inner vanes that would otherwise intersect with the filter
 difference(){
-    for (a = [0 : count - 1]) {
-        rotate(a*360/count) {
-        translate([centerGap, -1, -extension]) 
-            cube([(filterD / 2) - centerGap, 1.5, housingHeight - fanGap + extension]);
+    for (a = [0 : numVanes - 1]) {
+        rotate(a * 360 / numVanes) {
+            translate([centerGap, -1, 0]){
+                cube([(filterDiameter / 2) - centerGap, vaneThickness, housingHeight - vaneHeightReduction]);
+            }
         }
     }
     
-    //mask out part of the vanes that we don't want to touch the filter
-    linear_extrude(height = housingHeight)
-    difference(){
-        circle(d = filterD + 2);
-        circle(d = extensionDiameter);
+    linear_extrude(height = housingHeight){
+        difference(){
+            circle(d = filterDiameter + 2);
+            circle(d = maxInnerDiameter);
+        }
     }
 }
 
-//actual filter housing part thingy
-slats = 16;
-slatwidth = 4;
-
-supportslats = 16; //slats that go the other way
+//The actual housing part
+beams = 16;
+opposingBeams = 16; //beams that go the other way
+beamwidth = 4;
 wallwidth = 3;
+amountOfTwist = 69;
 
-swirls = 1; //swirl1!!!
-
+//clarity: this difference() masks out bits of the beam vortex that would otherwise exceed maxwidth, and prevents them from intersecting with the screw holes
 difference(){
-    //cool vortex
-    translate([0,0,0]){ //load-bearing translate
-        linear_extrude(height = housingHeight, twist = 69)
-        for (a = [0 : slats - 1]) {
-                rotate(a*360/slats) {
-                translate([filterD/2, -1, -extension]) 
-                    //cube([2, 3, housingHeight]);
-                    square([wallwidth, slatwidth]);
+    translate([0,0,0]){ //load-bearing translate so the enclosing difference() will consider both beams to be a single object
+        linear_extrude(height = housingHeight, twist = amountOfTwist){
+            for (a = [0 : beams - 1]) {
+                rotate(a*360/beams) {
+                    translate([filterDiameter/2, -1, -extension]){
+                        square([wallwidth, beamwidth]);
+                    }
                 }
+            }
         }
-        linear_extrude(height = housingHeight, twist = -69)
-        for (a = [0 : supportslats - 1]) {
-                rotate(a*360/supportslats) {
-                translate([filterD/2, -1, -extension]) 
-                    //cube([2, 3, housingHeight]);
-                    square([wallwidth, slatwidth]);
+        
+        linear_extrude(height = housingHeight, twist = -amountOfTwist){
+            for (a = [0 : opposingBeams - 1]) {
+                rotate(a*360/opposingBeams) {
+                    translate([filterDiameter/2, -1, -extension]){
+                        square([wallwidth, beamwidth]);
+                    }
                 }
+            }
         }
     }
-
-    //mask out the bits of the vortex that end up beyond the screw plane
     
     translate([0,0, housingHeight / 2])
         difference(){
@@ -102,124 +81,138 @@ difference(){
             cube([maxwidth,maxwidth, housingHeight], true);
     }
     
-    //put this here too so it isn't interrupted by the vortex
-    christext();
+    //Subtract a little extra around the screwholes so the vanes don't end up inside them
+    //Prevent any vane from entering the screwhole area
+    translate([0,0, housingHeight - 2]){
+        screwHoleCutouts(1, fanPlaneHeight);
+    }
+    //Use a spherical shape to taper slightly so it doesn't look like such a hard cut
+    translate([0, 0, housingHeight - 2]){
+        scale([1,1,2.5]){
+            screwHoleTaper();
+        }
+    }
+    
+}
+
+//Rings that further enclose/strengthen the housing vortex.
+//I'm sure someone could come up with more flexible math; these will scale with the rest of the housing, but if you change the number of slats, they will no longer line up to the intersections
+translate([0,0, (housingHeight / 6) * 5  - 2]){
+    linear_extrude(height = beamwidth, center = true){
+        difference(){
+            circle(d = filterDiameter + 5);
+            circle(d = filterDiameter);
+        }
+    }
+}
+
+translate([0,0, housingHeight / 1.5 - 1]){
+    linear_extrude(height = beamwidth, center = true){
+        difference(){
+            circle(d = filterDiameter + 5);
+            circle(d = filterDiameter);
+        }
+    }
+}
+    
+translate([0,0, housingHeight / 2 - 1]){
+    linear_extrude(height = beamwidth, center = true){
+        difference(){
+            circle(d = filterDiameter + 5);
+            circle(d = filterDiameter);
+        }
+    }
+}
+    
+translate([0,0, housingHeight / 3 - 1]){
+    linear_extrude(height = beamwidth, center = true){
+        difference(){
+            circle(d = filterDiameter + 5);
+            circle(d = filterDiameter);
+        }
+    }
+}
+    
+translate([0,0, housingHeight / 6 - 1]){
+    linear_extrude(height = beamwidth, center = true){
+        difference(){
+            circle(d = filterDiameter + 5);
+            circle(d = filterDiameter);
+        }
+    }
 }
 
 
-//stick a circle in the middle, bitches love circles
-/*
-translate([0,0, housingHeight - 1])
-    linear_extrude(height = 2)
-        difference(){
-            circle(d = filterD + 5); //no idk why this is the difference that makes the circle look like it's the same width as the housing twisties
-            circle(d = filterD);
-        }*/
-
-
-    translate([0,0, (housingHeight / 6) * 5  - 2])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterD + 5);
-        circle(d = filterD);
-    }
-    
-    translate([0,0, housingHeight / 1.5 - 1])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterD + 5);
-        circle(d = filterD);
-    }
-    
-translate([0,0, housingHeight / 2 - 1])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterD + 5);
-        circle(d = filterD);
-    }
-    
-    translate([0,0, housingHeight / 3 - 1])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterD + 5);
-        circle(d = filterD);
-    }
-    
-        translate([0,0, housingHeight / 6 - 1])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterD + 5);
-        circle(d = filterD);
-    }
-    
-    
-
-        
-
-
-//fan attach
+//Fan plane
 fanPlaneHeight = 4;
+screwHoleDiameter = 6;
+screwDistance = 26; //distance of the screwholes from the center of the fan plane
 
-//note that screwholes in this document were given one extra mm from the center, and made 1mm larger to compensate, because they were having overlap issues with the void for the filter
+//Splitting this off into its own module so we can reuse it to make the screwhole cutouts, and to (politely) keep the vortex from intersecting with them
+module screwHoleCutouts(taperAmnt, height){
+    rotate([180,0,0]){
+        translate([screwDistance, screwDistance, - 3]){
+            linear_extrude(height = height, scale = taperAmnt){
+                circle(d = screwHoleDiameter);
+            }
+        }
+                
+        translate([-screwDistance, screwDistance, - 3]){
+            linear_extrude(height = height, scale = taperAmnt){
+                circle(d = screwHoleDiameter);
+            }
+        }
+        
+        translate([screwDistance, -screwDistance, - 3]){
+            linear_extrude(height = height, scale = taperAmnt){
+                circle(d = screwHoleDiameter);
+            }
+        }
+        
+        translate([-screwDistance, -screwDistance, - 3]){
+            linear_extrude(height = height, scale = taperAmnt){
+                circle(d = screwHoleDiameter);
+            }
+        }
+    }
+}
+
+module screwHoleTaper(){
+    translate([screwDistance, screwDistance, 0]){
+        sphere(d = screwHoleDiameter);
+    }
+            
+    translate([-screwDistance, screwDistance, 0]){
+        sphere(d = screwHoleDiameter);
+    }
     
-screwHole = 6;
-//screwHole = 7; //compensate for minkowski
-screwDistance = 26;
+    translate([screwDistance, -screwDistance, 0]){
+        sphere(d = screwHoleDiameter);
+    }
+    
+    translate([-screwDistance, -screwDistance, 0]){
+        sphere(d = screwHoleDiameter);
+    }
+}
 
-module screwPlane(zPos){
+module screwPlane(zPos, omitCutouts){
     translate([0,0,zPos])
     difference(){
         difference(){
             cube([maxwidth, maxwidth, fanPlaneHeight], center = true);
-            translate([0,0,-3])
-                linear_extrude(height = fanPlaneHeight + 2)
-                    circle(d = filterD + 1);
+            
+            if (!omitCutouts){
+                translate([0,0,-3])
+                    linear_extrude(height = fanPlaneHeight + 2)
+                        circle(d = filterDiameter + 1);
+            }
         }
-        translate([screwDistance, screwDistance, - 3])
-            linear_extrude(height = fanPlaneHeight + 2)
-                circle(d = screwHole);
         
-        translate([-screwDistance, screwDistance, -3])
-            linear_extrude(height = fanPlaneHeight + 2)
-                circle(d = screwHole);
-        
-        translate([screwDistance, -screwDistance, -3])
-            linear_extrude(height = fanPlaneHeight + 2)
-                circle(d = screwHole);
-        
-        translate([-screwDistance, -screwDistance, -3])
-            linear_extrude(height = fanPlaneHeight + 2)
-                circle(d = screwHole);
+        if (!omitCutouts){
+            screwHoleCutouts(1, fanPlaneHeight + 2);
+        }
     }
 }
 
-//minkowski(){
-screwPlane(housingHeight - 2);
-//    sphere(1);
-//}
-
-//base 
-//minkowski(){
-    difference(){
-        cube([maxwidth, maxwidth, fanPlaneHeight], center = true);
-        
-        translate([screwDistance, screwDistance, - 3])
-            linear_extrude(height = fanPlaneHeight + 2)
-                circle(d = screwHole);
-        
-        translate([-screwDistance, screwDistance, -3])
-            linear_extrude(height = fanPlaneHeight + 2)
-                circle(d = screwHole);
-        
-        translate([screwDistance, -screwDistance, -3])
-            linear_extrude(height = fanPlaneHeight + 2)
-                circle(d = screwHole);
-        
-        translate([-screwDistance, -screwDistance, -3])
-            linear_extrude(height = fanPlaneHeight + 2)
-                circle(d = screwHole);
-        
-        christext();
-    //}
-    //sphere(1);
-}
+screwPlane(housingHeight - 2, false); //Screw plane on top
+screwPlane(0, true); //Solid base (no holes)
