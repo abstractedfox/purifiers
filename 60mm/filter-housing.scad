@@ -6,25 +6,26 @@
 
 
 //Some notes:
-//At the time of this writing, OpenSCAD visualizes in a very weird way until you actually render, so if it looks bizarre and physically impossible, try rendering
+//At the time of this writing, OpenSCAD visualizes this part in a weird way until you actually render, so if it looks bizarre and physically impossible, try rendering
 
-$fn = 250; //Amount of 'resolution' to give to shape primitives (less == more blocky, reduce if renders or the editor are too slow or if you just like blocky air purifiers)
+include <root.scad>
 
-filterDiameter = 66; //6cm filter diameter, add 3 for (2mm wall width) + (1mm wiggle room to fit the filter)
+$fn = 25; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
 
-housingHeight = 86;
+filterDiameter = 63; //The filter is actually 60mm, but we added some wiggle room
 
-maxwidth = 69; //of the entire housing, ie screwplanes
+housingHeight = 86; //filter is 85mm tall, we'll give it 1mm of wiggle room
+
+vortexWidth = 3; //density of the vortex 'walls' from the center, 3mm seems to provide good durability
+
+maxwidth = filterDiameter + vortexWidth; //we use this parameter to ensure the width of the screw planes meets the outer bounds of the vortex
 
 
 //Internal vanes
-numVanes = 8; //number of vanes
 centerGap = 6; //space in the center where the vanes don't meet
 vaneHeightReduction = 30; //space between flow conditioner vanes and these vanes (if set to 0, the vanes will go up to the height of the part)
 vaneThickness = 1.5;
 maxInnerDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
-
-extension = 0; //depth to extend the vanes below the housing of the flow conditioner
 
 //clarity note: this enclosing difference() is to mask out the portion of the inner vanes that would otherwise intersect with the filter
 difference(){
@@ -48,7 +49,6 @@ difference(){
 beams = 16;
 opposingBeams = 16; //beams that go the other way
 beamwidth = 4;
-wallwidth = 3;
 amountOfTwist = 69;
 
 //clarity: this difference() masks out bits of the beam vortex that would otherwise exceed maxwidth, and prevents them from intersecting with the screw holes
@@ -57,8 +57,8 @@ difference(){
         linear_extrude(height = housingHeight, twist = amountOfTwist){
             for (a = [0 : beams - 1]) {
                 rotate(a*360/beams) {
-                    translate([filterDiameter/2, -1, -extension]){
-                        square([wallwidth, beamwidth]);
+                    translate([filterDiameter/2, -1, 0]){
+                        square([vortexWidth, beamwidth]);
                     }
                 }
             }
@@ -67,8 +67,8 @@ difference(){
         linear_extrude(height = housingHeight, twist = -amountOfTwist){
             for (a = [0 : opposingBeams - 1]) {
                 rotate(a*360/opposingBeams) {
-                    translate([filterDiameter/2, -1, -extension]){
-                        square([wallwidth, beamwidth]);
+                    translate([filterDiameter/2, -1, 0]){
+                        square([vortexWidth, beamwidth]);
                     }
                 }
             }
@@ -82,11 +82,12 @@ difference(){
     }
     
     //Subtract a little extra around the screwholes so the vanes don't end up inside them
-    //Prevent any vane from entering the screwhole area
+    
+    //Prevent any amount of vane from entering the immediate screwhole area
     translate([0,0, housingHeight - 2]){
         screwHoleCutouts(1, fanPlaneHeight);
     }
-    //Use a spherical shape to taper slightly so it doesn't look like such a hard cut
+    //Use a spherical shape to taper below it slightly so it doesn't look like such a hard cut
     translate([0, 0, housingHeight - 2]){
         scale([1,1,2.5]){
             screwHoleTaper();
@@ -142,13 +143,16 @@ translate([0,0, housingHeight / 6 - 1]){
     }
 }
 
+//Screw planes
+translate([0, 0, housingHeight - 2])
+    screwPlane(size = maxwidth, omitCutouts = false, setScrewDistance = screwDistance); //Screw plane on top
+screwPlane(maxwidth, omitCutouts = true); //Solid base (no holes)
 
-//Fan plane
-fanPlaneHeight = 4;
-screwHoleDiameter = 6;
-screwDistance = 26; //distance of the screwholes from the center of the fan plane
+
+//screwDistance = 26; //distance of the screwholes from the center of the fan plane
 
 //Splitting this off into its own module so we can reuse it to make the screwhole cutouts, and to (politely) keep the vortex from intersecting with them
+/*
 module screwHoleCutouts(taperAmnt, height){
     rotate([180,0,0]){
         translate([screwDistance, screwDistance, - 3]){
@@ -212,7 +216,4 @@ module screwPlane(zPos, omitCutouts){
             screwHoleCutouts(1, fanPlaneHeight + 2);
         }
     }
-}
-
-screwPlane(housingHeight - 2, false); //Screw plane on top
-screwPlane(0, true); //Solid base (no holes)
+}*/
