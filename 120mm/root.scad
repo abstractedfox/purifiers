@@ -13,17 +13,14 @@ filterDiameter = 60;
 filterWiggleRoom = 3; //extra space to allot where we need the filter to fit inside of something
 filterSpace = filterDiameter + filterWiggleRoom;
 
-numVanes = 8; //number of vanes
-
 //Fan plane
 fanPlaneHeight = 4;
 screwHoleDiameter = 6;
-fanPlaneWidth = filterDiameter + 3; //We assume the fan plane will always be a square, so this also counts as its depth
+screwDistanceInner = 25;
+fanPlaneWidthInner = filterDiameter + 3; //We assume the fan plane will always be a square, so this also counts as its depth
 
 wallWidth = 3; //where we can use a global wall width, use this
 
-//distance of the screwholes from the center of the fan plane
-screwDistance = 25;
 
 module screwHoleCutouts(taperAmnt, height){
     rotate([180,0,0]){

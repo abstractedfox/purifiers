@@ -6,7 +6,7 @@
 
 filterD = 119; //diameter of the cylinder
 
-$fn = 600;
+//$fn = 600;
 
 //height of this enclosure
 flowConditionerHeight = 100; //in mm

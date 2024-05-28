@@ -6,7 +6,7 @@
 
 //r3: extended screwDistanceInner to 27 to match the dimensions used for inner filter housing r2
 
-filterD = 40; //interior of filter is 40mm
+inletDiameter = 40; //interior of filter is 40mm
 
 housingHeight = 32;
 
@@ -24,7 +24,7 @@ module screwPlane(zPos){
             cube([maxwidth, maxwidth, fanPlaneHeight], center = true);
             translate([0,0,-3])
                 linear_extrude(height = fanPlaneHeight + 2)
-                    circle(d = filterD + 1, $fn = 200);
+                    circle(d = inletDiameter + 1, $fn = 200);
         }
         translate([screwDistanceInner, screwDistanceInner, - 3])
             linear_extrude(height = fanPlaneHeight + 2)
@@ -109,7 +109,7 @@ translate([0,0,housingHeight - fanPlaneHeight - 0.5]){
             rotate(a*360/count - 22) {
                 translate([0, -0.5, 0])
                     linear_extrude(height=fanPlaneHeight)
-                        square([(filterD/2) - centerGap + 1, 1]);
+                        square([(inletDiameter/2) - centerGap + 1, 1]);
             }
         }
         
@@ -117,7 +117,7 @@ translate([0,0,housingHeight - fanPlaneHeight - 0.5]){
     //grate circle
     linear_extrude(height=fanPlaneHeight - fanGap + extension)
     difference(){
-        circle(d = filterD/2 + 2, $fn = 200);
-        circle(d = filterD/2, $fn = 200);
+        circle(d = inletDiameter/2 + 2);
+        circle(d = inletDiameter/2);
     }
 }
