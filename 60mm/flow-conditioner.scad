@@ -6,7 +6,7 @@
 
 include <root.scad>
 
-$fn = 25; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
+$fn = 50; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
 
 flowConditionerHeight = 45; //in mm
 
@@ -86,7 +86,7 @@ color([0, 1, 0, 0.5]){
 
 //Screw planes
 translate([0, 0, flowConditionerHeight]){
-    screwPlane(size = maxwidth, omitCutouts = false, setScrewDistance = screwDistance);
+    screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistance);
 }
 
 //We'll use the same parameters that dictate the size of the size of the screw planes for the filter housing so they'll look nicer together

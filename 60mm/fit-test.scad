@@ -5,6 +5,9 @@
 //tooling which facilitates the use or operation of such software.
 
 
+//fit-test.scad
+//This is a file you can use as a test print to make certain a filter will fit correctly into given dimensions for the filter housing before you print a whole filter housing
+
 //Some notes:
 //At the time of this writing, OpenSCAD visualizes this part in a weird way until you actually render, so if it looks bizarre and physically impossible, try rendering
 
@@ -12,7 +15,7 @@ include <root.scad>
 
 $fn = 25; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
 
-housingHeight = filterHeight;
+housingHeight = 20;
 maxwidth = filterSpace + wallWidth; //we use this parameter to ensure the width of the screw planes meets the outer bounds of the vortex
 
 //Use anywhere we want to mask geometry from escaping maxwidth
@@ -39,7 +42,7 @@ module cylinderBounds(){
 
 //Internal vanes
 centerGap = 6; //space in the center where the vanes don't meet
-vaneHeightReduction = 30; //space between flow conditioner vanes and these vanes (if set to 0, the vanes will go up to the height of the part)
+vaneHeightReduction = 0; //space between flow conditioner vanes and these vanes (if set to 0, the vanes will go up to the height of the part)
 vaneThickness = 1.5;
 maxInnerDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
 
@@ -114,6 +117,7 @@ difference(){
 //We'll also mask out any extra circle that appears outside maxwidth
 difference(){
     translate([0, 0, 0]){ //load-bearing translate
+        /*
         translate([0,0, (housingHeight / 6) * 5  - 2]){
             linear_extrude(height = beamwidth, center = true){
                 difference(){
@@ -131,7 +135,7 @@ difference(){
                 }
             }
         }
-            
+            */
         translate([0,0, housingHeight / 2 - 1]){
             linear_extrude(height = beamwidth, center = true){
                 difference(){
@@ -140,7 +144,7 @@ difference(){
                 }
             }
         }
-            
+         /*   
         translate([0,0, housingHeight / 3 - 1]){
             linear_extrude(height = beamwidth, center = true){
                 difference(){
@@ -157,7 +161,7 @@ difference(){
                     circle(d = filterSpace);
                 }
             }
-        }
+        }*/
     }
 
     outerBounds();

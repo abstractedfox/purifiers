@@ -14,8 +14,8 @@ barrelHeight = 22;
 //Barrel
 linear_extrude(height = barrelHeight){
     difference(){
-        circle(d = filterDiameter + 2);
-        circle(d = filterDiameter - 3);
+        circle(d = filterDiameter + wallWidth);
+        circle(d = filterDiameter);
     }
 }
 
