@@ -8,7 +8,7 @@ include <root.scad>
 
 $fn = 50; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
 
-flowConditionerHeight = 45; //in mm
+flowConditionerHeight = 35; //in mm
 
 maxwidth = fanPlaneWidth; //max width of the whole enclosure, affects screw plane dimensions
 
@@ -27,7 +27,7 @@ secondSmallestCircle = filterDiameter - 33;
 centerGap = (smallestCircle / 2) - 1; //space in the center where the vanes don't meet
 extraVanesCenterGap = (secondSmallestCircle / 2) - 1; //-1 to make sure the geometry intersects
 
-fanGap = 10; //space between flow conditioner vanes and fan plane
+fanGap = 0; //space between flow conditioner vanes and fan plane
 extension = 25; //depth to extend the vanes below the housing of the flow conditioner
 extensionDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
 
@@ -85,11 +85,11 @@ color([0, 1, 0, 0.5]){
 }
 
 //Screw planes
-translate([0, 0, flowConditionerHeight]){
+translate([0, 0, flowConditionerHeight - (screwPlaneHeight / 2)]){
     screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistance);
 }
 
 //We'll use the same parameters that dictate the size of the size of the screw planes for the filter housing so they'll look nicer together
-translate([0, 0, 2]){
+translate([0, 0, screwPlaneHeight / 2]){
     screwPlane(size = filterSpace + wallWidth, omitCutouts = false, setScrewDistance = screwDistance);
 }

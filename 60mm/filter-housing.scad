@@ -98,7 +98,7 @@ difference(){
     
     //Prevent any amount of vane from entering the immediate screwhole area
     translate([0,0, housingHeight - 2]){
-        screwHoleCutouts(1, fanPlaneHeight);
+        screwHoleCutouts(1, screwPlaneHeight);
     }
     //Use a spherical shape to taper below it slightly so it doesn't look like such a hard cut
     translate([0, 0, housingHeight - 2]){
