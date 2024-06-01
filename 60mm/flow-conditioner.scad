@@ -6,9 +6,9 @@
 
 include <root.scad>
 
-$fn = 50; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
+$fn = 25; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
 
-flowConditionerHeight = 35; //in mm
+flowConditionerHeight = 25; //in mm
 
 maxwidth = fanPlaneWidth; //max width of the whole enclosure, affects screw plane dimensions
 
@@ -29,7 +29,6 @@ extraVanesCenterGap = (secondSmallestCircle / 2) - 1; //-1 to make sure the geom
 
 fanGap = 0; //space between flow conditioner vanes and fan plane
 extension = 25; //depth to extend the vanes below the housing of the flow conditioner
-extensionDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
 
 vaneThiccness = 1;
 vaneYOffset = -1; //This offset prevents the vanes from looking 'twisty'. You will probably need to modify this if you change the vane thickness
@@ -47,7 +46,7 @@ difference(){
         linear_extrude(height = extension){
             difference(){
                 circle(d = filterDiameter + 2);
-                circle(d = extensionDiameter);
+                circle(d = maxInnerFilterDiameter);
             }
         }
     }
@@ -97,13 +96,12 @@ translate([0, 0, screwPlaneHeight / 2]){
 
 //Shroud
 //Hopefully this makes more air go through the filter instead of around it
-shroudDepth = 10;
 union(){
     translate([0, 0, -shroudDepth]){
         linear_extrude(height = shroudDepth){
             difference(){
-                circle(d = extensionDiameter);
-                circle(d = extensionDiameter - vaneThiccness);
+                circle(d = maxInnerFilterDiameter);
+                circle(d = maxInnerFilterDiameter - vaneThiccness);
             }
         }
     }
@@ -113,7 +111,7 @@ union(){
     linear_extrude(height = 1){
         difference(){
             circle(d = filterDiameter);
-            circle(d = extensionDiameter);
+            circle(d = maxInnerFilterDiameter);
         }
     }
 }

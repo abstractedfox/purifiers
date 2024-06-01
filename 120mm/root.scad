@@ -12,6 +12,7 @@ filterHeight = 85;
 filterDiameter = 60;
 filterWiggleRoom = 3; //extra space to allot where we need the filter to fit inside of something
 filterSpace = filterDiameter + filterWiggleRoom;
+maxInnerFilterDiameter = 38; //maximum diameter that can be used inside the filter
 
 //Fan plane
 fanPlaneHeight = 4;

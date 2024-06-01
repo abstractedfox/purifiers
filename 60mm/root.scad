@@ -12,9 +12,12 @@ filterHeight = 85;
 filterDiameter = 60;
 filterWiggleRoom = 3; //extra space to allot where we need the filter to fit inside of something
 filterSpace = filterDiameter + filterWiggleRoom;
+maxInnerFilterDiameter = 38; //maximum diameter that can be used inside the filter
 
 numVanes = 8; //number of vanes
 wallWidth = 4; //where we can use a global wall width, use this
+
+shroudDepth = 10; //Wherever we put a 'shroud' in the filter (to try to force more air through it instead of around it), this is how large it should be
 
 //Screw plane
 screwPlaneHeight = 4;

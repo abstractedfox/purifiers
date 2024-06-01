@@ -41,7 +41,6 @@ module cylinderBounds(){
 centerGap = 6; //space in the center where the vanes don't meet
 vaneHeightReduction = 30; //space between flow conditioner vanes and these vanes (if set to 0, the vanes will go up to the height of the part)
 vaneThickness = 1.5;
-maxInnerDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
 
 //clarity note: this enclosing difference() is to mask out the portion of the inner vanes that would otherwise intersect with the filter
 difference(){
@@ -56,7 +55,7 @@ difference(){
     linear_extrude(height = housingHeight){
         difference(){
             circle(d = filterSpace + 2);
-            circle(d = maxInnerDiameter);
+            circle(d = maxInnerFilterDiameter);
         }
     }
 }
@@ -165,6 +164,22 @@ difference(){
 }
 
 //Screw planes
-translate([0, 0, housingHeight - 2])
+//We offset the z positions of the planes so they won't invade the part of the enclosure meant for the filter
+translate([0, 0, housingHeight - (screwPlaneHeight / 2)]){
     screwPlane(size = maxwidth, omitCutouts = false, setScrewDistance = screwDistance, overrideFilterCutout = filterSpace); //Screw plane on top
-screwPlane(maxwidth, omitCutouts = true); //Solid base (no holes)
+}
+
+translate([0, 0, -(screwPlaneHeight / 2)]){
+    screwPlane(maxwidth, omitCutouts = true); //Solid base (no holes)
+}
+
+
+//Shroud (to encourage air to go through and not around)
+translate([0, 0, (screwPlaneHeight / 2)]){
+    linear_extrude(height = shroudDepth){
+        difference(){
+            circle(d = maxInnerFilterDiameter);
+            circle(d = maxInnerFilterDiameter - vaneThickness);
+        }
+    }
+}

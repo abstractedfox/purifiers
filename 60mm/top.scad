@@ -38,8 +38,15 @@ for (a = [0 : numVanes - 1]) {
 //Circle in the center of the grate; for aesthetics/making it harder to stick your fingers in
 linear_extrude(height = barrelHeight - fanGap){
     difference(){
-        circle(d = filterDiameter/2 + 3);
-        circle(d = filterDiameter/2);
+        circle(d = filterDiameter/3 + 3);
+        circle(d = filterDiameter/3);
+    }
+}
+
+linear_extrude(height = barrelHeight - fanGap){
+    difference(){
+        circle(d = (2 * filterDiameter) / 3 + 3);
+        circle(d = (2 * filterDiameter) / 3);
     }
 }
 

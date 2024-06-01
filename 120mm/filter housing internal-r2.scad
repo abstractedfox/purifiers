@@ -17,7 +17,9 @@ fanPlaneHeight = 3; //We don't have to worry as much about durability of the scr
 numVanes = 6; //number of inner vanes
 centerGap = 6; //space in the center where the vanes don't meet
 inletGrateGap = 40; //Gap from the inlet grate to the vanes
-maxInnerDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
+maxInnerFilterDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
+
+shroudDepth = 10; //Wherever we put a 'shroud' in the filter (to try to force more air through it instead of around it), this is how large it should be
 
 //Inner vanes
 difference(){
@@ -33,42 +35,42 @@ difference(){
     linear_extrude(height = housingHeight){
         difference(){
             circle(d = filterSpace + 2);
-            circle(d = maxInnerDiameter);
+            circle(d = maxInnerFilterDiameter);
         }
     }
 }
 
-//actual filter housing part thingy
+//Vertical slats
 slats = 18;
 slatwidth = 2;
-supportslats = 18; //number of slats
-supportSlatsSize = 10;
+slatDepth = 10;
 
-//Outer slats/supports
 linear_extrude(height = housingHeight, twist = 0){
     for (a = [0 : slats - 1]) {
         rotate(a*360/slats) {
             translate([filterSpace/2, -1, 0]){ 
-                square([supportSlatsSize, slatwidth]);
+                square([slatDepth, slatwidth]);
             }
         }
     }
 }
 
 //top
-topDiameter = filterSpace + 6;
 linear_extrude(height = fanPlaneHeight)
     circle(d = topDiameter);
 
+//Slats that go on the 'top' (bottom of the model, top when printed)
+topThings = slats;
+topDiameter = filterSpace + 6;
+
 //top things, to be honest these are a complete shot in the dark but I just kind of feel like they will promote airflow
 topThingsHeight = 5;
-topThingsLength = (topDiameter / 2) + supportSlatsSize - 3;
+topThingsLength = (topDiameter / 2) + slatDepth - 3;
 
-//Slats that go along the top
 rotate([180,0,0]){
     linear_extrude(height = topThingsHeight){
-        for (a = [0 : supportslats - 1]) {
-            rotate(a*360/supportslats) {
+        for (a = [0 : topThings - 1]) {
+            rotate(a*360/topThings) {
                 translate([0, -1, 0]) {
                     square([topThingsLength, slatwidth]);
                 }
@@ -77,7 +79,7 @@ rotate([180,0,0]){
     }
 }
 
-//stick a circle in the middle, bitches love circles
+//Supporting circles
     translate([0,0, (housingHeight / 6) * 5  - 2])
 linear_extrude(height = slatwidth, center = true)
     difference(){
