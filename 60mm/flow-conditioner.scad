@@ -93,3 +93,27 @@ translate([0, 0, flowConditionerHeight - (screwPlaneHeight / 2)]){
 translate([0, 0, screwPlaneHeight / 2]){
     screwPlane(size = filterSpace + wallWidth, omitCutouts = false, setScrewDistance = screwDistance);
 }
+
+
+//Shroud
+//Hopefully this makes more air go through the filter instead of around it
+shroudDepth = 10;
+union(){
+    translate([0, 0, -shroudDepth]){
+        linear_extrude(height = shroudDepth){
+            difference(){
+                circle(d = extensionDiameter);
+                circle(d = extensionDiameter - vaneThiccness);
+            }
+        }
+    }
+
+    //color([0, 0, 0, 0.8])
+
+    linear_extrude(height = 1){
+        difference(){
+            circle(d = filterDiameter);
+            circle(d = extensionDiameter);
+        }
+    }
+}

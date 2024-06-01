@@ -8,7 +8,7 @@ include <root.scad>
 
 $fn = 50; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
 
-unitHeight = 10;
+unitHeight = 15;
 
 linear_extrude(height = unitHeight){
     difference(){
@@ -17,8 +17,11 @@ linear_extrude(height = unitHeight){
     }
 }
 
-translate([0, 0, unitHeight]){
+//since the screw planes are placed with center == true, we'll offset them so the total height of this piece is actually the value put in as 'unitHeight'
+translate([0, 0, unitHeight - (screwPlaneHeight / 2)]){
     screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistance);
 }
 
-screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistance);
+translate([0, 0, screwPlaneHeight / 2]){
+    screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistance);
+}
