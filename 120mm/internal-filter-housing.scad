@@ -11,22 +11,27 @@ include <root.scad>
 
 $fn = 25; //overriding this since the editor can be slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
 
+/*
+color([1,0,0,0.2])
+translate([0,10,0])
+cube([100,10,filterHeight]);*/
+
 housingHeight = filterHeight;
-fanPlaneHeight = 3; //We don't have to worry as much about durability of the screw plane for an internal part, so we'll make it 3mm
 
 numVanes = 6; //number of inner vanes
 centerGap = 6; //space in the center where the vanes don't meet
 inletGrateGap = 40; //Gap from the inlet grate to the vanes
 maxInnerFilterDiameter = 38; //maximum diameter that the vanes can occupy inside the filter
+vaneWidth = 1.5;
 
 shroudDepth = 10; //Wherever we put a 'shroud' in the filter (to try to force more air through it instead of around it), this is how large it should be
 
-//Inner vanes
+//Inner-filter vanes
 difference(){
     for (a = [0 : numVanes - 1]) {
         rotate(a*360/numVanes) {
             translate([centerGap, -1, 0]){
-                cube([(filterSpace / 2) - centerGap, 1.8, housingHeight - inletGrateGap]);
+                cube([(filterSpace / 2) - centerGap, vaneWidth, housingHeight - inletGrateGap]);
             }
         }
     }
@@ -45,7 +50,7 @@ slats = 18;
 slatwidth = 2;
 slatDepth = 10;
 
-linear_extrude(height = housingHeight, twist = 0){
+linear_extrude(height = housingHeight + screwPlaneHeight, twist = 0){
     for (a = [0 : slats - 1]) {
         rotate(a*360/slats) {
             translate([filterSpace/2, -1, 0]){ 
@@ -55,9 +60,13 @@ linear_extrude(height = housingHeight, twist = 0){
     }
 }
 
-//top
-linear_extrude(height = fanPlaneHeight)
-    circle(d = topDiameter);
+//top (as in literal top when installed; sits at the bottom of the model in openscad)
+topHeight = 2;
+translate([0, 0, -topHeight]){
+    linear_extrude(height = topHeight){
+        circle(d = topDiameter);
+    }
+}
 
 //Slats that go on the 'top' (bottom of the model, top when printed)
 topThings = slats;
@@ -71,6 +80,7 @@ rotate([180,0,0]){
     linear_extrude(height = topThingsHeight){
         for (a = [0 : topThings - 1]) {
             rotate(a*360/topThings) {
+                //the y axis -1 prevents the individual objects from being slightly offset with the vertical slats
                 translate([0, -1, 0]) {
                     square([topThingsLength, slatwidth]);
                 }
@@ -80,47 +90,54 @@ rotate([180,0,0]){
 }
 
 //Supporting circles
-    translate([0,0, (housingHeight / 6) * 5  - 2])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterSpace + 5);
-        circle(d = filterSpace);
+circleThickness = 5; //ie from the center
+translate([0,0, (housingHeight / 6) * 5  - 2]){
+    linear_extrude(height = slatwidth, center = true){
+        difference(){
+            circle(d = filterSpace + circleThickness);
+            circle(d = filterSpace);
+        }
     }
+}
     
-    translate([0,0, housingHeight / 1.5 - 1])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterSpace + 5);
-        circle(d = filterSpace);
+translate([0,0, housingHeight / 1.5 - 1]){
+    linear_extrude(height = slatwidth, center = true){
+        difference(){
+            circle(d = filterSpace + circleThickness);
+            circle(d = filterSpace);
+        }
     }
+}
     
-translate([0,0, housingHeight / 2 - 1])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterSpace + 5);
-        circle(d = filterSpace);
+translate([0,0, housingHeight / 2 - 1]){
+    linear_extrude(height = slatwidth, center = true){
+        difference(){
+            circle(d = filterSpace + circleThickness);
+            circle(d = filterSpace);
+        }
     }
+}
     
-    translate([0,0, housingHeight / 3 - 1])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterSpace + 5);
-        circle(d = filterSpace);
+translate([0,0, housingHeight / 3 - 1]){
+    linear_extrude(height = slatwidth, center = true){
+        difference(){
+            circle(d = filterSpace + circleThickness);
+            circle(d = filterSpace);
+        }
     }
+}
     
-        translate([0,0, housingHeight / 6 - 1])
-linear_extrude(height = slatwidth, center = true)
-    difference(){
-        circle(d = filterSpace + 5);
-        circle(d = filterSpace);
+translate([0,0, housingHeight / 6 - 1]){
+    linear_extrude(height = slatwidth, center = true){
+        difference(){
+            circle(d = filterSpace + circleThickness);
+            circle(d = filterSpace);
+        }
     }
+}
 
-//screw plane
-screwDistance = 27;  //increased distance from 26 to 27mm because we were having wall width issues in cura
-    
-    //refactor note because i don't want to forget this when we come back to fix it: at the moment, the functions in root.scad are hardcoded to use 'screwDistance' for their screw distances. we renamed that to screwDistanceInner in that document, and the reason it still works is because THE INTERPRETER LOOKS AT THE ONE HERE AND GOES OH YEAH OK SURE I FOUND SCREWDISTANCE ITS RIGHT HERE GUYS
-
-translate([0, 0, housingHeight]){
+//Screw plane; increase its height by half the height of the screw plane so the internal volume matches the filter correctly
+translate([0, 0, housingHeight + (screwPlaneHeight / 2)]){
     color([0, 1, 0, 0.5]){
         screwPlane(fanPlaneWidthInner, false, screwDistanceInner);
     }

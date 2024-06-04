@@ -68,7 +68,7 @@ amountOfTwist = 69;
 
 //clarity: this difference() masks out bits of the beam vortex that would otherwise exceed maxwidth, and prevents them from intersecting with the screw holes
 difference(){
-    translate([0,0,0]){ //load-bearing translate so the enclosing difference() will consider both beams to be a single object
+    union(){
         linear_extrude(height = housingHeight, twist = amountOfTwist){
             for (a = [0 : beams - 1]) {
                 rotate(a*360/beams) {
@@ -112,7 +112,7 @@ difference(){
 //I'm sure someone could come up with more flexible math; these will scale with the rest of the housing, but if you change the number of slats, they will no longer line up to the intersections.
 //We'll also mask out any extra circle that appears outside maxwidth
 difference(){
-    translate([0, 0, 0]){ //load-bearing translate
+    union(){ 
         translate([0,0, (housingHeight / 6) * 5  - 2]){
             linear_extrude(height = beamwidth, center = true){
                 difference(){
@@ -166,7 +166,7 @@ difference(){
 //Screw planes
 //We offset the z positions of the planes so they won't invade the part of the enclosure meant for the filter
 translate([0, 0, housingHeight - (screwPlaneHeight / 2)]){
-    screwPlane(size = maxwidth, omitCutouts = false, setScrewDistance = screwDistance, overrideFilterCutout = filterSpace); //Screw plane on top
+    screwPlane(size = maxwidth, omitCutouts = false, setScrewDistance = screwDistanceDefault, overrideFilterCutout = filterSpace); //Screw plane on top
 }
 
 translate([0, 0, -(screwPlaneHeight / 2)]){

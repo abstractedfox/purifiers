@@ -14,36 +14,39 @@ filterWiggleRoom = 3; //extra space to allot where we need the filter to fit ins
 filterSpace = filterDiameter + filterWiggleRoom;
 maxInnerFilterDiameter = 38; //maximum diameter that can be used inside the filter
 
+enclosureDiameter = 120; //Diameter of the main enclosure
+
 //Fan plane
-fanPlaneHeight = 4;
+screwPlaneHeight = 3;
 screwHoleDiameter = 6;
 screwDistanceInner = 25;
-fanPlaneWidthInner = filterDiameter + 3; //We assume the fan plane will always be a square, so this also counts as its depth
+fanPlaneWidthInner = filterDiameter + 5; //We assume the fan plane will always be a square, so this also counts as its depth
 
 wallWidth = 3; //where we can use a global wall width, use this
 
+screwDistanceDefault = 25;
 
-module screwHoleCutouts(taperAmnt, height){
+module screwHoleCutouts(taperAmnt, height, setScrewDistance = screwDistanceDefault){
     rotate([180,0,0]){
-        translate([screwDistance, screwDistance, - 3]){
+        translate([setScrewDistance, setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
                 circle(d = screwHoleDiameter);
             }
         }
                 
-        translate([-screwDistance, screwDistance, - 3]){
+        translate([-setScrewDistance, setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
                 circle(d = screwHoleDiameter);
             }
         }
         
-        translate([screwDistance, -screwDistance, - 3]){
+        translate([setScrewDistance, -setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
                 circle(d = screwHoleDiameter);
             }
         }
         
-        translate([-screwDistance, -screwDistance, - 3]){
+        translate([-setScrewDistance, -setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
                 circle(d = screwHoleDiameter);
             }
@@ -51,39 +54,42 @@ module screwHoleCutouts(taperAmnt, height){
     }
 }
 
-module screwHoleTaper(){
-    translate([screwDistance, screwDistance, 0]){
+
+module screwHoleTaper(setScrewDistance = screwDistanceDefault){
+    translate([setScrewDistance, setScrewDistance, 0]){
         sphere(d = screwHoleDiameter);
     }
             
-    translate([-screwDistance, screwDistance, 0]){
+    translate([-setScrewDistance, setScrewDistance, 0]){
         sphere(d = screwHoleDiameter);
     }
     
-    translate([screwDistance, -screwDistance, 0]){
+    translate([setScrewDistance, -setScrewDistance, 0]){
         sphere(d = screwHoleDiameter);
     }
     
-    translate([-screwDistance, -screwDistance, 0]){
+    translate([-setScrewDistance, -setScrewDistance, 0]){
         sphere(d = screwHoleDiameter);
     }
 }
 
-module screwPlane(size, omitCutouts, setScrewDistance){
+filterCutout = filterDiameter + 1;
+
+module screwPlane(size, omitCutouts, setScrewDistance = screwDistanceDefault, overrideFilterCutout = filterDiameter){
     screwDistance = setScrewDistance;
     difference(){
         difference(){
-            cube([size, size, fanPlaneHeight], center = true);
+            cube([size, size, screwPlaneHeight], center = true);
             
             if (!omitCutouts){
-                translate([0,0,-3])
-                    linear_extrude(height = fanPlaneHeight + 2)
-                        circle(d = filterDiameter + 1);
+                translate([0, 0, -3])
+                    linear_extrude(height = screwPlaneHeight + 2)
+                        circle(d = overrideFilterCutout);
             }
         }
         
         if (!omitCutouts){
-            screwHoleCutouts(1, fanPlaneHeight + 2);
+            screwHoleCutouts(1, screwPlaneHeight + 2, setScrewDistance = screwDistance);
         }
     }
 }

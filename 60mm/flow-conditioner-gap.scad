@@ -19,9 +19,9 @@ linear_extrude(height = unitHeight){
 
 //since the screw planes are placed with center == true, we'll offset them so the total height of this piece is actually the value put in as 'unitHeight'
 translate([0, 0, unitHeight - (screwPlaneHeight / 2)]){
-    screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistance);
+    screwPlane(size = fanPlaneWidth, omitCutouts = false);
 }
 
 translate([0, 0, screwPlaneHeight / 2]){
-    screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistance);
+    screwPlane(size = fanPlaneWidth, omitCutouts = false);
 }

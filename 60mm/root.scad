@@ -25,29 +25,29 @@ screwHoleDiameter = 6;
 fanPlaneWidth = filterDiameter + wallWidth; //We assume the fan plane will always be a square, so this also counts as its depth. Tying the width of the fan plane to filterDiameter and wallWidth seems to ensure that it will cover exactly the amount of distance needed for the centers of its edges to meet the outer bound of a filterDiameter + wallWidth sized cylinder, which looks nice
 
 //distance of the screwholes from the center of the fan plane
-screwDistance = 25;
+screwDistanceDefault = 25;
 
-module screwHoleCutouts(taperAmnt, height){
+module screwHoleCutouts(taperAmnt, height, setScrewDistance = screwDistanceDefault){
     rotate([180,0,0]){
-        translate([screwDistance, screwDistance, - 3]){
+        translate([setScrewDistance, setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
                 circle(d = screwHoleDiameter);
             }
         }
                 
-        translate([-screwDistance, screwDistance, - 3]){
+        translate([-setScrewDistance, setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
                 circle(d = screwHoleDiameter);
             }
         }
         
-        translate([screwDistance, -screwDistance, - 3]){
+        translate([setScrewDistance, -setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
                 circle(d = screwHoleDiameter);
             }
         }
         
-        translate([-screwDistance, -screwDistance, - 3]){
+        translate([-setScrewDistance, -setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
                 circle(d = screwHoleDiameter);
             }
@@ -55,27 +55,28 @@ module screwHoleCutouts(taperAmnt, height){
     }
 }
 
-module screwHoleTaper(){
-    translate([screwDistance, screwDistance, 0]){
+
+module screwHoleTaper(setScrewDistance = screwDistanceDefault){
+    translate([setScrewDistance, setScrewDistance, 0]){
         sphere(d = screwHoleDiameter);
     }
             
-    translate([-screwDistance, screwDistance, 0]){
+    translate([-setScrewDistance, setScrewDistance, 0]){
         sphere(d = screwHoleDiameter);
     }
     
-    translate([screwDistance, -screwDistance, 0]){
+    translate([setScrewDistance, -setScrewDistance, 0]){
         sphere(d = screwHoleDiameter);
     }
     
-    translate([-screwDistance, -screwDistance, 0]){
+    translate([-setScrewDistance, -setScrewDistance, 0]){
         sphere(d = screwHoleDiameter);
     }
 }
 
 filterCutout = filterDiameter + 1;
 
-module screwPlane(size, omitCutouts, setScrewDistance, overrideFilterCutout = filterDiameter){
+module screwPlane(size, omitCutouts, setScrewDistance = screwDistanceDefault, overrideFilterCutout = filterDiameter){
     screwDistance = setScrewDistance;
     difference(){
         difference(){
@@ -89,7 +90,7 @@ module screwPlane(size, omitCutouts, setScrewDistance, overrideFilterCutout = fi
         }
         
         if (!omitCutouts){
-            screwHoleCutouts(1, screwPlaneHeight + 2);
+            screwHoleCutouts(1, screwPlaneHeight + 2, setScrewDistance = screwDistance);
         }
     }
 }
