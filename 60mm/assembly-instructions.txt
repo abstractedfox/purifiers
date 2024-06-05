@@ -1,0 +1,27 @@
+Parts:
+- One "Pure Enrichment PureZone Mini" HEPA filter (just the filter)
+- One pair of shoelaces
+- Two 60mm fans with TX3 connectors
+- A USB to TX3 power cable (should be possible to find ones that support two fans per cable)
+
+Parts recommendations:
+I've had good luck with Startech "FAN6X25TX3H" 60x25mm fans
+
+Printing recommendations:
+flow-conditioner: Print 'upside down', with the topmost screw plane on the build plate. A raft isn't recommended; it can be hard to break off of this one.
+
+filter-housing: Print at the given orientation. You should only need supports for the top screw plane
+
+flow-conditioner-gap: Print at the given orientation
+
+top: Print at the given orientation
+
+Assembly:
+This design stacks from bottom to top in this order:
+1. Filter housing (with filter inside)
+2. Flow conditioner
+3. Flow conditioner gap
+4. Fans
+5. Top
+
+I like to lace them up as I go, this way I can ensure each next part is nice and snug against the part below it. You could fasten this together with anything that fits through the (unthreaded) 'screw' holes, though I like the laces since the tension helps to keep everything where it's supposed to be. You can also pick whatever colors you want, which is fun :3

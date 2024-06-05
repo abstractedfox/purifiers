@@ -6,7 +6,9 @@
 
 //root.scad: Common parameters/functions
 
-$fn = 200; //Amount of 'resolution' to give to shape primitives (less == more blocky, reduce or override it if renders or the editor are too slow or if you just like blocky air purifiers)
+$fn = 350; //Amount of 'resolution' to give to shape primitives (less == more blocky, reduce or override it if renders or the editor are too slow or if you just like blocky air purifiers)
+
+baseHeight = 32;
 
 filterHeight = 85;
 filterDiameter = 60;
@@ -15,18 +17,21 @@ filterSpace = filterDiameter + filterWiggleRoom;
 maxInnerFilterDiameter = 38; //maximum diameter that can be used inside the filter
 
 enclosureDiameter = 120; //Diameter of the main enclosure
+wallWidth = 3; //where we can use a global wall width, use this
 
 //Fan plane
 screwPlaneHeight = 3;
 screwHoleDiameter = 6;
+screwDistanceDefault = 25;
 screwDistanceInner = 25;
 fanPlaneWidthInner = filterDiameter + 5; //We assume the fan plane will always be a square, so this also counts as its depth
+screwDistanceOuter = 54;
 
-wallWidth = 3; //where we can use a global wall width, use this
+shroudHeight = 10; //height for wherever we use a 'shroud' to discourage airflow from entering through the edges of the enclosure
 
-screwDistanceDefault = 25;
+tolerance = 0.5; //wherever we want two pieces to fit together closely, use this tolerance
 
-module screwHoleCutouts(taperAmnt, height, setScrewDistance = screwDistanceDefault){
+module screwHoleCutouts(taperAmnt = 1, height = 5, setScrewDistance = screwDistanceDefault){
     rotate([180,0,0]){
         translate([setScrewDistance, setScrewDistance, - 3]){
             linear_extrude(height = height, scale = taperAmnt){
@@ -75,7 +80,7 @@ module screwHoleTaper(setScrewDistance = screwDistanceDefault){
 
 filterCutout = filterDiameter + 1;
 
-module screwPlane(size, omitCutouts, setScrewDistance = screwDistanceDefault, overrideFilterCutout = filterDiameter){
+module screwPlane(size, omitCutouts = false, setScrewDistance = screwDistanceDefault, overrideFilterCutout = filterDiameter){
     screwDistance = setScrewDistance;
     difference(){
         difference(){

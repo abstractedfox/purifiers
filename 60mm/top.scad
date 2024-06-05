@@ -51,5 +51,5 @@ linear_extrude(height = barrelHeight - fanGap){
 }
 
 translate([0, 0, barrelHeight]){
-    screwPlane(fanPlaneWidth, false, screwDistance);
+    screwPlane(fanPlaneWidth, false, screwDistanceDefault);
 }

@@ -53,7 +53,7 @@ slatDepth = 10;
 linear_extrude(height = housingHeight + screwPlaneHeight, twist = 0){
     for (a = [0 : slats - 1]) {
         rotate(a*360/slats) {
-            translate([filterSpace/2, -1, 0]){ 
+            translate([filterSpace / 2, -1, 0]){ 
                 square([slatDepth, slatwidth]);
             }
         }

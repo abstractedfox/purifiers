@@ -85,12 +85,12 @@ color([0, 1, 0, 0.5]){
 
 //Screw planes
 translate([0, 0, flowConditionerHeight - (screwPlaneHeight / 2)]){
-    screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistance);
+    screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistanceDefault);
 }
 
 //We'll use the same parameters that dictate the size of the size of the screw planes for the filter housing so they'll look nicer together
 translate([0, 0, screwPlaneHeight / 2]){
-    screwPlane(size = filterSpace + wallWidth, omitCutouts = false, setScrewDistance = screwDistance);
+    screwPlane(size = filterSpace + wallWidth, omitCutouts = false, setScrewDistance = screwDistanceDefault);
 }
 
 
