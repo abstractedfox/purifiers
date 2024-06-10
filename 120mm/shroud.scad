@@ -6,10 +6,14 @@
 
 include <root.scad>
 
+//$fn = 25;
+
+shroudDepth = 1;
+
 //Screw plane
 translate([0, 0, (screwPlaneHeight / 2)]){
     difference(){
-        screwPlane(size = enclosureDiameter, omitCutouts = false, overrideFilterCutout = maxInnerFilterDiameter);
+        screwPlane(size = enclosureDiameter, omitCutouts = false, overrideFilterCutout = maxInnerFilterDiameter - shroudDepth);
         screwHoleCutouts(setScrewDistance = screwDistanceOuter);
     }
 }
@@ -32,6 +36,7 @@ for (a = [0 : grateCount - 1]) {
     }
 }
     
+
 //grate circle
 linear_extrude(height=screwPlaneHeight - fanGap + extension){
     difference(){
@@ -46,7 +51,7 @@ translate([0, 0, screwPlaneHeight]){
     linear_extrude(height = shroudHeight){
         difference(){
             circle(d = outerShroud);
-            circle(d = outerShroud - 1); //This piece isn't load-bearing, so it shouldn't need to be especially thick
+            circle(d = outerShroud - shroudDepth); //This piece isn't load-bearing, so it shouldn't need to be especially thick
         }
     }
 }
@@ -56,7 +61,7 @@ translate([0, 0, screwPlaneHeight]){
     linear_extrude(height = shroudHeight){
         difference(){
             circle(d = innerShroud);
-            circle(d = innerShroud - 1); //This piece isn't load-bearing, so it shouldn't need to be especially thick
+            circle(d = innerShroud - shroudDepth); //This piece isn't load-bearing, so it shouldn't need to be especially thick
         }
     }
 }
