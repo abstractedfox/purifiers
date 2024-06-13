@@ -19,6 +19,8 @@ wallWidth = 4; //where we can use a global wall width, use this
 
 shroudDepth = 10; //Wherever we put a 'shroud' in the filter (to try to force more air through it instead of around it), this is how large it should be
 
+tolerance = 0.5; //wherever we want two pieces to fit together closely, use this tolerance
+
 //Screw plane
 screwPlaneHeight = 4;
 screwHoleDiameter = 6;

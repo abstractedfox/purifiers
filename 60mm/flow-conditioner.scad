@@ -10,8 +10,6 @@ $fn = 25; //overriding this since the editor can be very slow with this part at 
 
 flowConditionerHeight = 25; //in mm
 
-maxwidth = fanPlaneWidth; //max width of the whole enclosure, affects screw plane dimensions
-
 linear_extrude(height = flowConditionerHeight){
     difference(){
         circle(d = filterDiameter + wallWidth);
