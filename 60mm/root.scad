@@ -6,7 +6,7 @@
 
 //root.scad: Common parameters/functions
 
-$fn = 300; //Amount of 'resolution' to give to shape primitives (less == more blocky, reduce or override it if renders or the editor are too slow or if you just like blocky air purifiers)
+//$fn = 300; //Amount of 'resolution' to give to shape primitives (less == more blocky, reduce or override it if renders or the editor are too slow or if you just like blocky air purifiers)
 
 filterHeight = 85;
 filterDiameter = 60;
