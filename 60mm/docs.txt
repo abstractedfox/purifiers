@@ -1,0 +1,15 @@
+To be honest, there isn't a ton of code here, but here's a rundown of what's going on.
+
+Both designs use a 'root.scad' file to standardize code that we want to reuse in more than one component, and to hold constants that we want to be the same across an entire design. The hope (though, not the guarantee) is that resizing a design (ie to fit a differently sized filter) should be able to start by adjusting values in root.scad, with the other files only requiring minor changes. Mileage may vary, of course.
+
+
+Code standards:
+- Use brackets to enclose modifier functions (difference, transform, etc)
+- Avoid 'mystery' values; if something requires an offset, either use a variable named for its purpose (ideal if it gets used more than once) or include a comment that explains it
+
+
+Building:
+To build all STL files from source, or to prepare a release, there's a handy makefile for gnu make! The call to OpenSCAD used in the makefile will automatically set the 'production' fn number, which will make all meshes build at a higher triangle count.
+
+By default, the makefile assumes you have openscad on path. If you don't, you can use the "make_set_openscad.sh" shell script. This is useful if you're on a Mac for example; pass the OpenSCAD executable (OpenSCAD.app/MacOS/openscad) as the first argument and the make target as the second argument. It's a good idea to run make with -j so it will build several files at once; the script does this automatically.
+

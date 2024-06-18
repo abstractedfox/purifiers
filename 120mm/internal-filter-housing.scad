@@ -9,13 +9,6 @@ include <root.scad>
 //Some notes:
 //This part is rendered 'upside down' in this document, in that the top is at [0, 0, 0]. For this reason, when we refer to the 'top' in variables and comments, that is referring to the effective 'top' of the part when it's installed
 
-$fn = 25; //overriding this since the editor can be slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
-
-/*
-color([1,0,0,0.2])
-translate([0,10,0])
-cube([100,10,filterHeight]);*/
-
 housingHeight = filterHeight;
 
 numVanes = 6; //number of inner vanes

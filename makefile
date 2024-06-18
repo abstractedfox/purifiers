@@ -21,6 +21,13 @@ ifneq "$$openscad" ""
 OPENSCAD:=$$openscad
 endif				
 
+zip:
+	if [[ $$(git diff-index HEAD) == "" ]]; then \
+		$(MAKE) clean \
+		zip -r release-$$(git rev-parse --short HEAD) out \
+	else \
+		echo "There are uncommitted changes, please commit your work before preparing a release"; \
+	fi
 
 #we explicitly set root.scad as a prerequisite so the entire project will be rebuilt if it gets modified
 out/60mm/%.stl : 60mm/%.scad 60mm/root.scad 
@@ -39,3 +46,10 @@ $(OBJ_DIR)/60mm/src.tar.gz: $(60mm_dir)/*.scad
 	tar -czf $@ $<
 
 60mm: $(OBJ_DIR) $(60mm_stl) $(60mm_src) $(OBJ_DIR)/60mm/instructions.txt $(OBJ_DIR)/60mm/src.tar.gz
+
+all:
+	$(MAKE) 60mm
+
+clean:
+	rm -rf out
+	$(MAKE) 60mm

@@ -6,7 +6,11 @@
 
 //root.scad: Common parameters/functions
 
-$fn = 350; //Amount of 'resolution' to give to shape primitives (less == more blocky, reduce or override it if renders or the editor are too slow or if you just like blocky air purifiers)
+resolutionProd = 400;
+resolutionTesting = 25;
+resolution = resolutionTesting;
+
+$fn = resolution;
 
 baseHeight = 32;
 

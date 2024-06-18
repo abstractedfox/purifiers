@@ -6,8 +6,6 @@
 
 include <root.scad>
 
-//$fn = 25;
-
 shroudDepth = 1;
 
 //Screw plane

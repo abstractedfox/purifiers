@@ -16,7 +16,7 @@ linear_extrude(height = flowConditionerHeight){
 }
 
 //Vanes
-circleGapFromFilter = 15; //Distance of the 'circles' from the filter
+circleGapFromFilter = 15; //Distance of the inner circles (colored green in the editor viewer) from where the filter starts 
 smallestCircle = filterDiameter - 44;
 secondSmallestCircle = filterDiameter - 33;
 

@@ -8,8 +8,6 @@ include <root.scad>
 
 barrelHeight = 22;
 
-hi = 43;
-
 //Barrel
 linear_extrude(height = barrelHeight){
     difference(){
@@ -34,21 +32,22 @@ for (a = [0 : numVanes - 1]) {
     }
 }
 
-//Circle in the center of the grate; for aesthetics/making it harder to stick your fingers in
+//Circles in the center of the grate; for aesthetics/making it harder to stick your fingers in
+circleDepth = 3;
 linear_extrude(height = barrelHeight - fanGap){
     difference(){
-        circle(d = filterDiameter/3 + 3);
+        circle(d = filterDiameter/3 + circleDepth);
         circle(d = filterDiameter/3);
     }
 }
 
 linear_extrude(height = barrelHeight - fanGap){
     difference(){
-        circle(d = (2 * filterDiameter) / 3 + 3);
+        circle(d = (2 * filterDiameter) / 3 + circleDepth);
         circle(d = (2 * filterDiameter) / 3);
     }
 }
 
 translate([0, 0, barrelHeight]){
-    screwPlane(fanPlaneWidth, false, screwDistanceDefault);
+    screwPlane(size = fanPlaneWidth, omitCutouts = false, setScrewDistance = screwDistanceDefault);
 }

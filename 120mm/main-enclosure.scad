@@ -6,8 +6,6 @@
 
 include <root.scad>
 
-//$fn = 25;
-
 //height of this enclosure
 unitHeight = 100; //in mm
 
