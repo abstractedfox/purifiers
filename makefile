@@ -21,7 +21,7 @@ ifneq "$$openscad" ""
 OPENSCAD:=$$openscad
 endif				
 
-zip:
+release:
 	if [[ $$(git diff-index HEAD) == "" ]]; then \
 		$(MAKE) clean \
 		zip -r release-$$(git rev-parse --short HEAD) out \
@@ -30,7 +30,7 @@ zip:
 	fi
 
 #we explicitly set root.scad as a prerequisite so the entire project will be rebuilt if it gets modified
-out/60mm/%.stl : 60mm/%.scad 60mm/root.scad 
+out/60mm/%.stl : 60mm/%.scad 60mm/root.scad
 	$(OPENSCAD) $< -D "resolution = resolutionProd" -o $@
 
 $(OBJ_DIR)/60mm:
