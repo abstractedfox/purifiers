@@ -22,7 +22,7 @@ OPENSCAD:=$$openscad
 endif				
 
 release:
-	if [[ $$(git diff-index HEAD) == "" || 1 ]]; then \
+	if [[ $$(git diff-index HEAD) == "" ]]; then \
 		$(MAKE) clean; \
 		zip -r release-$$(git rev-parse --short HEAD) out; \
 	else \
