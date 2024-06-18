@@ -16,6 +16,7 @@ OBJ_DIR:=out
 
 60mm_src:=$(patsubst %, $(60mm_dir)/%, $(60mm_src))
 
+#If we passed an openscad executable using an environment variable, use it
 ifneq "$$openscad" ""
 OPENSCAD:=$$openscad
 endif				
@@ -34,5 +35,7 @@ $(OBJ_DIR): $(OBJ_DIR)/60mm
 $(OBJ_DIR)/60mm/instructions.txt: 60mm/instructions.txt
 	cp -f $< $@ 
 
-60mm: $(OBJ_DIR) $(60mm_stl) $(60mm_src) $(OBJ_DIR)/60mm/instructions.txt
-		
+$(OBJ_DIR)/60mm/src.tar.gz: $(60mm_dir)/*.scad
+	tar -czf $@ $<
+
+60mm: $(OBJ_DIR) $(60mm_stl) $(60mm_src) $(OBJ_DIR)/60mm/instructions.txt $(OBJ_DIR)/60mm/src.tar.gz

@@ -8,6 +8,8 @@ include <root.scad>
 
 barrelHeight = 22;
 
+hi = 43;
+
 //Barrel
 linear_extrude(height = barrelHeight){
     difference(){
