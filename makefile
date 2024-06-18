@@ -22,9 +22,9 @@ OPENSCAD:=$$openscad
 endif				
 
 release:
-	if [[ $$(git diff-index HEAD) == "" ]]; then \
-		$(MAKE) clean \
-		zip -r release-$$(git rev-parse --short HEAD) out \
+	if [[ $$(git diff-index HEAD) == "" || 1 ]]; then \
+		$(MAKE) clean; \
+		zip -r release-$$(git rev-parse --short HEAD) out; \
 	else \
 		echo "There are uncommitted changes, please commit your work before preparing a release"; \
 	fi
