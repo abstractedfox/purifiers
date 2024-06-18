@@ -4,9 +4,13 @@
 //new or derived content from or based on the input set, or used to build a data set or training model for any software or
 //tooling which facilitates the use or operation of such software.
 
-//root.scad: Common parameters/functions
+//root.scad: Common parameters/functions used in other files
 
-//$fn = 300; //Amount of 'resolution' to give to shape primitives (less == more blocky, reduce or override it if renders or the editor are too slow or if you just like blocky air purifiers)
+resolutionProd = 300;
+resolutionTesting = 25;
+resolution = resolutionTesting;
+
+$fn = resolution;
 
 filterHeight = 85;
 filterDiameter = 60;

@@ -10,8 +10,6 @@
 
 include <root.scad>
 
-$fn = 25; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
-
 housingHeight = filterHeight;
 maxwidth = filterSpace + wallWidth; //we use this parameter to ensure the width of the screw planes meets the outer bounds of the vortex
 

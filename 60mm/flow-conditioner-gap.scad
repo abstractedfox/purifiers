@@ -6,8 +6,6 @@
 
 include <root.scad>
 
-$fn = 50; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
-
 unitHeight = 25;
 
 linear_extrude(height = unitHeight){

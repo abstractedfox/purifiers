@@ -16,30 +16,23 @@ OBJ_DIR:=out
 
 60mm_src:=$(patsubst %, $(60mm_dir)/%, $(60mm_src))
 
-#Ensure that modifying dependencies, like 'root.scad', enforces every file that uses it be rebuilt
-
-$(OBJ_DIR):
-	mkdir -pv $@
-	mkdir -pv $@/60mm
-
 ifneq "$$openscad" ""
-#echo "Setting openscad environment variable to $$openscad"
 OPENSCAD:=$$openscad
 endif				
 
-%.stl : %.scad 
-	@echo "hi we're in the implicit rule with the $%"
-	$(OPENSCAD) $% -o $@
 
+#we explicitly set root.scad as a prerequisite so the entire project will be rebuilt if it gets modified
+out/60mm/%.stl : 60mm/%.scad 60mm/root.scad 
+	$(OPENSCAD) $< -D "resolution = resolutionProd" -o $@
 
-#$(60mm_stl): $(60mm_src)
-#	$(OPENSCAD) $< -o $@
+$(OBJ_DIR)/60mm:
+	mkdir -pv $(OBJ_DIR)/60mm
 
-60mm: 60mm/top.scad out/60mm/top.stl
-	@echo "ok does THIS work"
+$(OBJ_DIR): $(OBJ_DIR)/60mm
+	mkdir -pv $@
 
-#60mm:  $(60mm_stl) $(60mm_src)
-#	@echo "time to make 60mm"
-#	@#echo $(60mm_src)
-#	@#echo $(60mm_stl)
-#	@echo "ok donee"
+$(OBJ_DIR)/60mm/instructions.txt: 60mm/instructions.txt
+	cp -f $< $@ 
+
+60mm: $(OBJ_DIR) $(60mm_stl) $(60mm_src) $(OBJ_DIR)/60mm/instructions.txt
+		

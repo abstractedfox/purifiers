@@ -6,9 +6,6 @@
 
 include <root.scad>
 
-//Some notes:
-//We are treating one 'unit' of size as 1mm in physical space
-
 barrelHeight = 22;
 
 //Barrel

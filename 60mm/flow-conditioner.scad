@@ -6,8 +6,6 @@
 
 include <root.scad>
 
-$fn = 25; //overriding this since the editor can be very slow with this part at high $fn, but it's recommended to comment it out and use the one inherited from root.scad when you go to actually export
-
 flowConditionerHeight = 25; //in mm
 
 linear_extrude(height = flowConditionerHeight){

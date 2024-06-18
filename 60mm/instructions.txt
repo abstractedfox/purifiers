@@ -1,6 +1,8 @@
+Disclaimer: This is released without warranty; do understand that even a well-planned, layered air-quality mitigation strategy can still fail. The author(s) accept no liability in the event that these designs fail to meet any standard of performance, or if they perform adversely to what was expected.
+
 Parts:
-- One "Pure Enrichment PureZone Mini" HEPA filter (just the filter)
-- One pair of shoelaces
+- One "Pure Enrichment PureZone Mini" HEPA filter
+- One pair of ~47" shoelaces (these will leave some slack)
 - Two 60mm fans with TX3 connectors
 - A USB to TX3 power cable (should be possible to find ones that support two fans per cable)
 
@@ -8,7 +10,7 @@ Parts recommendations:
 I've had good luck with Startech "FAN6X25TX3H" 60x25mm fans
 
 Printing recommendations:
-flow-conditioner: Print 'upside down', with the topmost screw plane on the build plate. A raft isn't recommended; it can be hard to break off of this one.
+flow-conditioner: Print 'upside down', with the topmost screw plane on the build plate. A raft isn't recommended unless you need one; it can be hard to break off.
 
 filter-housing: Print at the given orientation. You should only need supports for the top screw plane
 
