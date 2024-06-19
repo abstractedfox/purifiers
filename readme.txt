@@ -8,7 +8,7 @@ Required materials/resources:
 - Filament 3D Printer
 - 2x PC case fans per unit of the appropriate size and performance (strongly recommended to purchase ones with higher CFM and static pressure performance)
 - One 'Pure Enrichment PureZone Mini' HEPA filter
-- USB cable to power your fans (or however else you'd like to power them)
+- USB/TX3 power cable to power your fans (if your fans use TX3 connectors) (or however else you'd like to power them)
 - Any USB power source
 - Shoelaces (or whatever you want to hold them together, but I like shoelaces)
 

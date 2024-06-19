@@ -3,3 +3,4 @@
 *.swp
 assembly-preview.*
 out
+release*.zip

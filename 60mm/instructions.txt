@@ -7,7 +7,8 @@ Parts:
 - A USB to TX3 power cable (should be possible to find ones that support two fans per cable)
 
 Parts recommendations:
-I've had good luck with Startech "FAN6X25TX3H" 60x25mm fans
+I've had good luck with Startech "FAN6X25TX3H" 60x25mm fans.
+USB -> TX3 power cables aren't difficult to find, though many of them seem to be of dubious quality. If yours explodes, try not to buy that one again in the future (and remember that I'm not liable for that, always use your best judgement when using dubious electronics, external use only, this product is not intended to diagnose, treat, cure, or prevent any disease)
 
 Printing recommendations:
 flow-conditioner: Print 'upside down', with the topmost screw plane on the build plate. A raft isn't recommended unless you need one; it can be hard to break off.
