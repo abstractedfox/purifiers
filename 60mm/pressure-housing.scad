@@ -7,6 +7,8 @@
 include <root.scad>
 
 flowConditionerHeight = 50; //in mm
+//$fn=300;
+
 
 linear_extrude(height = flowConditionerHeight){
     difference(){
@@ -113,10 +115,12 @@ union(){
     }
 }
 
-linear_extrude(height = 30, scale = 0.8){
+chokeFactor = 0.8;
+
+linear_extrude(height = 30, scale = chokeFactor){
     difference(){
         circle(d = maxInnerFilterDiameter);
-        circle(d = maxInnerFilterDiameter - vaneThiccness);
+        circle(d = maxInnerFilterDiameter - (vaneThiccness/chokeFactor));
     }
 }
 
