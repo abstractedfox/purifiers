@@ -1,0 +1,1 @@
+This is an attempt to apply Bernoulli's principle for better pressure optimization, which should be more ideal for this type of application. Formal testing is needed to verify whether this design is more performant than the flow conditioner component it would replace. 

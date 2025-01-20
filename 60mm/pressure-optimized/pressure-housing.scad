@@ -7,7 +7,7 @@
 include <root.scad>
 
 flowConditionerHeight = 50; //in mm
-//$fn=300;
+//$fn = 300;
 
 
 linear_extrude(height = flowConditionerHeight){
@@ -31,56 +31,6 @@ extension = 25; //depth to extend the vanes below the housing of the flow condit
 vaneThiccness = 1;
 vaneYOffset = -1; //This offset prevents the vanes from looking 'twisty'. You will probably need to modify this if you change the vane thickness
 
-//clarity note: This difference() creates the 'extension' area of the vanes below the rest of the flow conditioner, it masks out the area of the vanes that would otherwise intersect with the filter
-/*
-difference(){
-    for (a = [0 : numVanes - 1]) {
-        rotate(a*360/numVanes) {
-            translate([centerGap, vaneYOffset, -extension]) 
-                cube([(filterDiameter / 2) - centerGap, vaneThiccness, flowConditionerHeight - fanGap + extension]);
-        }
-    }
-    
-    translate([0, 0, -extension]){ //extra - 1 to eliminate plane fighting
-        linear_extrude(height = extension){
-            difference(){
-                circle(d = filterDiameter + 2);
-                circle(d = maxInnerFilterDiameter);
-            }
-        }
-    }
-}
-
-//Extra vanes
-color([1, 0, 0]){ 
-    for (a = [0 : numVanes - 1]){
-        rotate(a*360/numVanes + 23){
-            translate([extraVanesCenterGap, -1]){
-                cube([(filterDiameter / 2) - extraVanesCenterGap, vaneThiccness, flowConditionerHeight - fanGap]);
-            }
-        }
-    }
-}
-*/
-//Circles!!
-module insideCircle(diameter){
-    circleThickness = 2;
-    difference(){
-        circle(d = diameter);
-        circle(d = diameter - circleThickness);
-    }
-}
-/*
-color([0, 1, 0, 0.5]){
-    translate([0, 0, circleGapFromFilter]){
-        linear_extrude(height = flowConditionerHeight - fanGap - circleGapFromFilter){
-            insideCircle(filterDiameter - 12);
-            insideCircle(filterDiameter - 22);
-            insideCircle(secondSmallestCircle);
-            insideCircle(smallestCircle);
-        }
-    }
-}*/
 
 //Screw planes
 translate([0, 0, flowConditionerHeight - (screwPlaneHeight / 2)]){
@@ -105,8 +55,6 @@ union(){
         }
     }
 
-    //color([0, 0, 0, 0.8])
-
     linear_extrude(height = 1){
         difference(){
             circle(d = filterDiameter);
@@ -115,8 +63,9 @@ union(){
     }
 }
 
-chokeFactor = 0.8;
 
+//Choke factor is the multiple by which the cross section is resized
+chokeFactor = 0.7;
 linear_extrude(height = 30, scale = chokeFactor){
     difference(){
         circle(d = maxInnerFilterDiameter);
